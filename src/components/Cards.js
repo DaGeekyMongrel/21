@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import Card from "./Card";
-import { deck, shuffle } from "../utils/cards";
+import { connect } from 'react-redux';
 
-export default function Cards() {
-  const [currentDeck, setCurrentDeck] = useState(null);
+import { shuffleCards } from '../actions/cardsActions';
+import Card from './Card';
 
+function Cards({ deck, shuffleCards }) {
   const shuffleHandler = () => {
-    setCurrentDeck(shuffle(deck));
+    shuffleCards();
   };
-
-  useEffect(() => {
-    setCurrentDeck(deck);
-  }, [setCurrentDeck]);
 
   return (
     <div>
       <button onClick={shuffleHandler}>Shuffle</button>
-      {currentDeck &&
-        currentDeck.map((item, key) => <Card key={key} card={item} />)}
+      {deck && deck.map((item, key) => <Card key={key} card={item} />)}
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  deck: state.cards.deck,
+});
+
+export default connect(mapStateToProps, { shuffleCards })(Cards);

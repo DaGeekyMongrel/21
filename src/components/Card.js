@@ -1,9 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 function Card({ card }) {
   const { default: img } = require(`../assets/${card.suit}/${card.rank}.svg`);
-  console.log(img);
 
   return <Image src={img} alt="" />;
 }
