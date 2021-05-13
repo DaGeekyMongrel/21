@@ -1,5 +1,5 @@
 import { deck, shuffle } from '../utils/cards';
-import { CARDS_SHUFFLE, CARDS_DEAL } from './types';
+import { CARDS_SHUFFLE, CARDS_DEAL, CARDS_RESET } from './types';
 
 export const shuffleCards = () => (dispatch) => {
   dispatch({
@@ -15,6 +15,8 @@ export const dealCards = (count) => (dispatch) => {
   });
 };
 
-export const startGame = () => {
-  dealCards(2);
+export const resetCards = () => (dispatch) => {
+  dispatch({
+    type: CARDS_RESET,
+  });
 };

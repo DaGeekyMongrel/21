@@ -1,4 +1,4 @@
-import { CARDS_SHUFFLE, CARDS_DEAL } from '../actions/types';
+import { CARDS_SHUFFLE, CARDS_DEAL, CARDS_RESET } from '../actions/types';
 import { deck } from '../utils/cards';
 
 const initialState = {
@@ -19,6 +19,8 @@ export default function cardsReducer(state = initialState, action) {
         deck: state.deck.slice(action.payload),
         hand: [...state.hand, ...state.deck.slice(0, action.payload)],
       };
+    case CARDS_RESET:
+      return initialState;
     default:
       return state;
   }
