@@ -11,7 +11,7 @@ function App() {
   return (
     <Provider store={store}>
       <div className="App">
-        <h1>21</h1>
+        <h1>Blackjack</h1>
         <HouseHand />
         <Controls />
         <PlayerHand />
