@@ -4,6 +4,7 @@ import {
   CARDS_DEAL,
   GAME_RESET,
   GAME_END,
+  WINNER_SET,
 } from '../actions/types';
 import { deck } from '../utils/cards';
 
@@ -12,6 +13,7 @@ const initialState = {
   playerHand: [],
   houseHand: [],
   inProgress: false,
+  winner: null,
 };
 
 export default function (state = initialState, action) {
@@ -44,6 +46,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         inProgress: true,
+      };
+
+    case WINNER_SET:
+      return {
+        ...state,
+        winner: action.payload,
       };
 
     default:

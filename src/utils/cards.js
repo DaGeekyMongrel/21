@@ -29,7 +29,34 @@ const deal = (deck, playersCount) => {
   return hands;
 };
 
-const calculateValues = (hand) =>
-  hand.reduce((acc, card) => acc + card.value, 0);
+const calcHand = (hand) => hand.reduce((acc, card) => acc + card.value, 0);
 
-module.exports = { suits, values, deck, shuffle, deal, calculateValues };
+const calculateWinner = (houseHand, playerHand) => {
+  const housePoints = calcHand(houseHand);
+  const playerPoints = calcHand(playerHand);
+
+  if (playerPoints > 21) return 'house';
+
+  if (
+    playerPoints === 21 &&
+    playerHand.length === 2 &&
+    (housePoints !== 21 || houseHand.length > 2)
+  )
+    return 'player';
+
+  if (housePoints > 21) return 'player';
+
+  if (housePoints === playerPoints) return 'push';
+
+  return housePoints > playerPoints ? 'house' : 'player';
+};
+
+module.exports = {
+  suits,
+  values,
+  deck,
+  shuffle,
+  deal,
+  calcHand,
+  calculateWinner,
+};

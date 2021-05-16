@@ -1,10 +1,12 @@
-import { calculateValues, deck, shuffle } from '../utils/cards';
+import { HOUSE, PLAYER } from '../constants';
+import { calcHand, calculateWinner, deck, shuffle } from '../utils/cards';
 import {
   CARDS_SHUFFLE,
   CARDS_DEAL,
   GAME_START,
   GAME_RESET,
   GAME_END,
+  WINNER_SET,
 } from './types';
 
 export const shuffleCards = () => ({
@@ -17,7 +19,9 @@ export const dealCard = (recipient) => ({
   payload: recipient,
 });
 
-export const startGame = () => (dispatch) => {
+export const startGame = () => (dispatch, getState) => {
+  if (getState().winner !== null) dispatch(resetGame());
+
   dispatch({
     type: GAME_START,
   });
@@ -26,7 +30,7 @@ export const startGame = () => (dispatch) => {
 
   // Deal 2 cards for both the house and the player
   for (let i = 0; i < 2; i++) {
-    ['house', 'player'].forEach((recipient) => {
+    [HOUSE, PLAYER].forEach((recipient) => {
       dispatch(dealCard(recipient));
     });
   }
@@ -37,11 +41,23 @@ export const resetGame = () => ({
 });
 
 export const endGame = () => (dispatch, getState) => {
-  while (calculateValues(getState().houseHand) < 17) {
-    dispatch(dealCard('house'));
+  let { houseHand, playerHand } = getState();
+
+  while (calcHand(houseHand) < 17) {
+    dispatch(dealCard(HOUSE));
+    houseHand = getState().houseHand;
   }
+
+  const winner = calculateWinner(houseHand, playerHand);
+
+  dispatch(setWinner(winner));
 
   dispatch({
     type: GAME_END,
   });
 };
+
+export const setWinner = (winner) => ({
+  type: WINNER_SET,
+  payload: winner,
+});
