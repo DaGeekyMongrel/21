@@ -1,4 +1,4 @@
-const suits = ["diamonds", "clubs", "hearts", "spades"];
+const suits = ['diamonds', 'clubs', 'hearts', 'spades'];
 const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
 
 const deck = suits.reduce((cards, suit) => {
@@ -29,4 +29,7 @@ const deal = (deck, playersCount) => {
   return hands;
 };
 
-module.exports = { suits, values, deck, shuffle, deal };
+const calculateValues = (hand) =>
+  hand.reduce((acc, card) => acc + card.value, 0);
+
+module.exports = { suits, values, deck, shuffle, deal, calculateValues };

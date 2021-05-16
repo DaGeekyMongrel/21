@@ -12,7 +12,7 @@ function Deck({ deck }) {
 }
 
 const mapStateToProps = (state) => ({
-  deck: state.cards.deck,
+  deck: state.deck,
 });
 
 export default connect(mapStateToProps)(Deck);

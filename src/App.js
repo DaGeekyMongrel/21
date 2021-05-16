@@ -2,8 +2,8 @@ import { Provider } from 'react-redux';
 
 import './App.css';
 import Controls from './components/Controls';
-import Deck from './components/Deck';
-import Hand from './components/Hand';
+import HouseHand from './components/HouseHand';
+import PlayerHand from './components/PlayerHand';
 import store from './store';
 
 function App() {
@@ -11,9 +11,9 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <h1>21</h1>
-        <Deck />
+        <HouseHand />
         <Controls />
-        <Hand />
+        <PlayerHand />
       </div>
     </Provider>
   );
