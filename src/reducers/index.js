@@ -61,7 +61,21 @@ export default function (state = initialState, action) {
       };
 
     case GAME_RESET:
-      return initialState;
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          hand: [],
+          points: 0,
+        },
+        house: {
+          ...state.house,
+          hand: [],
+          points: 0,
+        },
+        inProgress: false,
+        msg: '',
+      };
 
     case GAME_START:
       return {
