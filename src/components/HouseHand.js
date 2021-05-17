@@ -18,7 +18,7 @@ function HouseHand({ hand, inProgress }) {
 }
 
 const mapStateToProps = (state) => ({
-  hand: state.houseHand,
+  hand: state.house.hand,
   inProgress: state.inProgress,
 });
 

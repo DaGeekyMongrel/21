@@ -1,12 +1,10 @@
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { dealCard, endGame, resetGame, startGame } from '../actions';
+import { hit, endGame, resetGame, startGame } from '../actions';
 
-function Controls({ dealCard, endGame, inProgress, resetGame, startGame }) {
-  const hit = () => {
-    dealCard('player');
-  };
+function Controls(props) {
+  const { hit, endGame, inProgress, resetGame, startGame } = props;
 
   const inGameControls = (
     <Container>
@@ -27,9 +25,11 @@ function Controls({ dealCard, endGame, inProgress, resetGame, startGame }) {
 
 const Container = styled.div``;
 
-export default connect((state) => ({ inProgress: state.inProgress }), {
-  dealCard,
-  endGame,
-  resetGame,
-  startGame,
-})(Controls);
+const mapStateToProps = (state) => ({
+  inProgress: state.inProgress,
+  player: state.player,
+});
+
+const mapDispatchToProps = { hit, endGame, resetGame, startGame };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Controls);

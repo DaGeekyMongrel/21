@@ -1,22 +1,7 @@
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { HOUSE, PLAYER } from '../constants';
 
-function Messages({ winner }) {
-  let msg = '';
-
-  switch (winner) {
-    case PLAYER:
-      msg = 'YOU WON!';
-      break;
-    case HOUSE:
-      msg = 'YOU LOOSE! :(';
-      break;
-    case 'push':
-      msg = 'PUSH. No one wins';
-    default:
-  }
-
+function Messages({ msg }) {
   return <Container>{msg}</Container>;
 }
 
@@ -25,6 +10,6 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const mapStateToProps = (state) => ({ winner: state.winner });
+const mapStateToProps = (state) => ({ msg: state.msg });
 
 export default connect(mapStateToProps)(Messages);

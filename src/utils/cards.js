@@ -1,5 +1,10 @@
+const { HOUSE, PLAYER } = require('../constants');
+
 const suits = ['diamonds', 'clubs', 'hearts', 'spades'];
 const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
+const ranks = {
+  ace: 12,
+};
 
 const deck = suits.reduce((cards, suit) => {
   values.forEach((value, rank) => cards.push({ rank, suit, value }));
@@ -29,26 +34,33 @@ const deal = (deck, playersCount) => {
   return hands;
 };
 
-const calcHand = (hand) => hand.reduce((acc, card) => acc + card.value, 0);
+const getPoints = (hand) => {
+  let points = hand.reduce((acc, card) => acc + card.value, 0);
+  let numOfAces = hand.filter((el) => el.rank === ranks.ace).length;
 
-const calculateWinner = (houseHand, playerHand) => {
-  const housePoints = calcHand(houseHand);
-  const playerPoints = calcHand(playerHand);
+  while (points > 21 && numOfAces > 0) {
+    points -= 10;
+    numOfAces--;
+  }
 
-  if (playerPoints > 21) return 'house';
+  return points;
+};
+
+const calculateWinner = (house, player) => {
+  if (player.points > 21) return HOUSE;
 
   if (
-    playerPoints === 21 &&
-    playerHand.length === 2 &&
-    (housePoints !== 21 || houseHand.length > 2)
+    player.points === 21 &&
+    player.hand.length === 2 &&
+    (house.points !== 21 || house.hand.length > 2)
   )
-    return 'player';
+    return PLAYER;
 
-  if (housePoints > 21) return 'player';
+  if (house.points > 21) return PLAYER;
 
-  if (housePoints === playerPoints) return 'push';
+  if (house.points === player.points) return null;
 
-  return housePoints > playerPoints ? 'house' : 'player';
+  return house.points > player.points ? HOUSE : PLAYER;
 };
 
 module.exports = {
@@ -57,6 +69,6 @@ module.exports = {
   deck,
   shuffle,
   deal,
-  calcHand,
+  getPoints,
   calculateWinner,
 };

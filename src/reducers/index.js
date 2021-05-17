@@ -5,26 +5,46 @@ import {
   GAME_RESET,
   GAME_END,
   WINNER_SET,
+  MESSAGE_SET,
 } from '../actions/types';
-import { deck } from '../utils/cards';
+import { deck, getPoints } from '../utils/cards';
 
 const initialState = {
   deck: deck,
-  playerHand: [],
-  houseHand: [],
+  player: {
+    hand: [],
+    points: 0,
+    wins: 0,
+  },
+  house: {
+    hand: [],
+    points: 0,
+    wins: 0,
+  },
+  rounds: 0,
   inProgress: false,
-  winner: null,
+  msg: '',
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case CARDS_DEAL:
-      const recipient = `${action.payload}Hand`;
+      const recipient = action.payload;
+      const nextCard = [...state.deck.slice(0, 1)][0];
+      const nextHand = [...state[recipient].hand, nextCard];
+
+      const changes = {
+        [recipient]: {
+          ...state[recipient],
+          hand: nextHand,
+          points: getPoints(nextHand),
+        },
+        deck: state.deck.slice(1),
+      };
 
       return {
         ...state,
-        deck: state.deck.slice(1),
-        [recipient]: [...state[recipient], ...state.deck.slice(0, 1)],
+        ...changes,
       };
 
     case CARDS_SHUFFLE:
@@ -37,6 +57,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         inProgress: false,
+        rounds: state.rounds + 1,
       };
 
     case GAME_RESET:
@@ -49,9 +70,17 @@ export default function (state = initialState, action) {
       };
 
     case WINNER_SET:
+      const winner = action.payload;
+
       return {
         ...state,
-        winner: action.payload,
+        [winner]: { ...state[winner], wins: state[winner].wins + 1 },
+      };
+
+    case MESSAGE_SET:
+      return {
+        ...state,
+        msg: action.payload,
       };
 
     default:
