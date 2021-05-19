@@ -46,21 +46,24 @@ const getPoints = (hand) => {
   return points;
 };
 
-const calculateWinner = (house, player) => {
-  if (player.points > 21) return HOUSE;
+const calculateWinner = (houseHand, playerHand) => {
+  const playerPoints = getPoints(playerHand);
+  const housePoints = getPoints(houseHand);
+
+  if (playerPoints > 21) return HOUSE;
 
   if (
-    player.points === 21 &&
-    player.hand.length === 2 &&
-    (house.points !== 21 || house.hand.length > 2)
+    playerPoints === 21 &&
+    playerHand.length === 2 &&
+    (housePoints !== 21 || houseHand.length > 2)
   )
     return PLAYER;
 
-  if (house.points > 21) return PLAYER;
+  if (housePoints > 21) return PLAYER;
 
-  if (house.points === player.points) return null;
+  if (housePoints === playerPoints) return null;
 
-  return house.points > player.points ? HOUSE : PLAYER;
+  return housePoints > playerPoints ? HOUSE : PLAYER;
 };
 
 module.exports = {

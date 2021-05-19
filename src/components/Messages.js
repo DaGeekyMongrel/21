@@ -10,6 +10,6 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const mapStateToProps = (state) => ({ msg: state.msg });
+const mapStateToProps = (state) => ({ msg: state.game.msg });
 
 export default connect(mapStateToProps)(Messages);

@@ -1,14 +1,10 @@
-import { CARDS_DEAL, CARDS_RESET, CARDS_SHUFFLE } from './types';
-
-export const shuffleCards = () => ({
-  type: CARDS_SHUFFLE,
-});
+import { CARDS_DEAL, CARDS_INIT } from './types';
 
 export const dealTo = (recipient) => ({
   type: CARDS_DEAL,
   payload: recipient,
 });
 
-export const resetCards = () => ({
-  type: CARDS_RESET,
+export const initCards = () => ({
+  type: CARDS_INIT,
 });

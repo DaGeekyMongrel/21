@@ -14,7 +14,7 @@ function PlayerHand({ hand }) {
 }
 
 const mapStateToProps = (state) => ({
-  hand: state.player.hand,
+  hand: state.cards.player,
 });
 
 export default connect(mapStateToProps)(PlayerHand);

@@ -1,4 +1,4 @@
-import { dealTo, resetCards, shuffleCards } from './cardsActions';
+import { dealTo, initCards } from './cardsActions';
 import { HOUSE, PLAYER } from '../constants';
 import {
   GAME_END,
@@ -7,7 +7,7 @@ import {
   MESSAGE_SET,
   WINNER_SET,
 } from './types';
-import { calculateWinner } from '../utils/cards';
+import { calculateWinner, getPoints } from '../utils/cards';
 
 export const resetGame = () => ({
   type: GAME_RESET,
@@ -25,29 +25,27 @@ export const setWinner = (winner) => ({
 
 export const hit = () => (dispatch, getState) => {
   dispatch(dealTo(PLAYER));
-  if (getState().player.points >= 21) dispatch(endGame());
+  if (getPoints(getState().cards.player) >= 21) dispatch(endGame());
 };
 
 export const finalDeal = () => (dispatch, getState) => {
-  let { house } = getState();
+  const getHousePoints = () => getPoints(getState().cards.house);
 
-  while (house.points < 17) {
+  while (getHousePoints() < 17) {
     dispatch(dealTo(HOUSE));
-    house = getState().house;
   }
 };
 
 export const startGame = () => (dispatch, getState) => {
-  if (getState().rounds !== 0) {
+  if (getState().game.rounds !== 0) {
     dispatch(resetGame());
-    dispatch(resetCards());
   }
 
   dispatch({
     type: GAME_START,
   });
 
-  dispatch(shuffleCards());
+  dispatch(initCards());
 
   // Deal 2 cards for both the house and the player
   for (let i = 0; i < 2; i++) {
@@ -55,13 +53,13 @@ export const startGame = () => (dispatch, getState) => {
     dispatch(dealTo(HOUSE));
   }
 
-  if (getState().player.points === 21) dispatch(endGame());
+  if (getPoints(getState().cards.player) === 21) dispatch(endGame());
 };
 
 export const endGame = () => (dispatch, getState) => {
   dispatch(finalDeal());
 
-  const { house, player } = getState();
+  const { house, player } = getState().cards;
 
   const winner = calculateWinner(house, player);
 

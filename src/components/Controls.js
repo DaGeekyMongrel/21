@@ -25,8 +25,7 @@ function Controls(props) {
 const Container = styled.div``;
 
 const mapStateToProps = (state) => ({
-  inProgress: state.inProgress,
-  player: state.player,
+  inProgress: state.game.inProgress,
 });
 
 const mapDispatchToProps = { hit, endGame, startGame };

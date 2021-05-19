@@ -1,6 +1,5 @@
 export const CARDS_DEAL = 'CARDS_DEAL';
-export const CARDS_RESET = 'CARDS_RESET';
-export const CARDS_SHUFFLE = 'CARDS_SHUFFLE';
+export const CARDS_INIT = 'CARDS_INIT';
 
 export const GAME_END = 'GAME_END';
 export const GAME_RESET = 'GAME_RESET';

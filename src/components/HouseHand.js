@@ -18,8 +18,8 @@ function HouseHand({ hand, inProgress }) {
 }
 
 const mapStateToProps = (state) => ({
-  hand: state.house.hand,
-  inProgress: state.inProgress,
+  hand: state.cards.house,
+  inProgress: state.game.inProgress,
 });
 
 export default connect(mapStateToProps)(HouseHand);
