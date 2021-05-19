@@ -1,29 +1,17 @@
-import {
-  GAME_START,
-  GAME_END,
-  WINNER_SET,
-  MESSAGE_SET,
-} from '../actions/types';
+import { GAME_START, GAME_END } from '../actions/types';
 
 const initialState = {
-  player: {
-    wins: 0,
-  },
-  house: {
-    wins: 0,
-  },
-  rounds: 0,
   inProgress: false,
   msg: '',
 };
 
-export default function (state = initialState, action) {
+export default function gameReducer(state = initialState, action) {
   switch (action.type) {
     case GAME_END:
       return {
         ...state,
         inProgress: false,
-        rounds: state.rounds + 1,
+        msg: action.payload,
       };
 
     case GAME_START:
@@ -31,20 +19,6 @@ export default function (state = initialState, action) {
         ...state,
         inProgress: true,
         msg: '',
-      };
-
-    case WINNER_SET:
-      const winner = action.payload;
-
-      return {
-        ...state,
-        [winner]: { ...state[winner], wins: state[winner].wins + 1 },
-      };
-
-    case MESSAGE_SET:
-      return {
-        ...state,
-        msg: action.payload,
       };
 
     default:

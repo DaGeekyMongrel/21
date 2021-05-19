@@ -1,21 +1,21 @@
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { hit, endGame, startGame } from '../actions/gameActions';
+import { hit, newGame, stand } from '../actions/gameActions';
 
 function Controls(props) {
-  const { hit, endGame, inProgress, startGame } = props;
+  const { hit, inProgress, newGame, stand } = props;
 
   const inGameControls = (
     <Container>
       <button onClick={hit}>Hit</button>
-      <button onClick={endGame}>Stand</button>
+      <button onClick={stand}>Stand</button>
     </Container>
   );
 
   const idleControls = (
     <Container>
-      <button onClick={startGame}>New game</button>
+      <button onClick={newGame}>New game</button>
     </Container>
   );
 
@@ -28,6 +28,6 @@ const mapStateToProps = (state) => ({
   inProgress: state.game.inProgress,
 });
 
-const mapDispatchToProps = { hit, endGame, startGame };
+const mapDispatchToProps = { hit, newGame, stand };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls);

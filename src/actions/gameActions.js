@@ -1,44 +1,34 @@
 import { dealTo, initCards } from './cardsActions';
-import { HOUSE, PLAYER } from '../constants';
-import {
-  GAME_END,
-  GAME_RESET,
-  GAME_START,
-  MESSAGE_SET,
-  WINNER_SET,
-} from './types';
-import { getHousePoints, getPlayerPoints, selectWinner } from '../selectors';
+import { HOUSE, PLAYER, MESSAGES } from '../constants';
+import { GAME_END, GAME_START } from './types';
+import { getHousePoints, getPlayerPoints } from '../selectors';
 
-export const resetGame = () => ({
-  type: GAME_RESET,
+const endGame = (message) => ({
+  type: GAME_END,
+  payload: message,
 });
 
-export const setMessage = (msg) => ({
-  type: MESSAGE_SET,
-  payload: msg,
-});
-
-export const setWinner = (winner) => ({
-  type: WINNER_SET,
-  payload: winner,
+const startGame = () => ({
+  type: GAME_START,
 });
 
 export const hit = () => (dispatch, getState) => {
   dispatch(dealTo(PLAYER));
-  if (getPlayerPoints(getState()) >= 21) dispatch(endGame());
-};
 
-export const finalDeal = () => (dispatch, getState) => {
-  while (getHousePoints(getState()) < 17) {
-    dispatch(dealTo(HOUSE));
+  const playerPoints = getPlayerPoints(getState());
+
+  // Bust
+  if (playerPoints > 21) {
+    dispatch(endGame(MESSAGES.bust));
+  }
+
+  if (playerPoints === 21) {
+    dispatch(stand());
   }
 };
 
-export const startGame = () => (dispatch, getState) => {
-  dispatch({
-    type: GAME_START,
-  });
-
+export const newGame = () => (dispatch, getState) => {
+  dispatch(startGame());
   dispatch(initCards());
 
   // Deal 2 cards for both the house and the player
@@ -47,24 +37,38 @@ export const startGame = () => (dispatch, getState) => {
     dispatch(dealTo(HOUSE));
   }
 
-  if (getPlayerPoints(getState()) === 21) dispatch(endGame());
+  // Blackjack
+  if (getPlayerPoints(getState()) === 21) {
+    if (getHousePoints(getState()) === 21) {
+      dispatch(endGame(MESSAGES.push));
+    } else {
+      dispatch(endGame(MESSAGES.blackjack));
+    }
+  }
 };
 
-export const endGame = () => (dispatch, getState) => {
-  dispatch(finalDeal());
-
-  const state = getState();
-
-  const winner = selectWinner(state);
-
-  if (winner) {
-    dispatch(setWinner(winner));
-    dispatch(setMessage(`${winner} wins!`));
-  } else {
-    dispatch(setMessage('Push'));
+export const stand = () => (dispatch, getState) => {
+  while (getHousePoints(getState()) < 17) {
+    dispatch(dealTo(HOUSE));
   }
 
-  dispatch({
-    type: GAME_END,
-  });
+  const housePoints = getHousePoints(getState());
+  const playerPoints = getPlayerPoints(getState());
+
+  if (housePoints > 21) {
+    dispatch(endGame(MESSAGES.win));
+    return;
+  }
+
+  if (housePoints > playerPoints) {
+    dispatch(endGame(MESSAGES.loose));
+    return;
+  }
+
+  if (housePoints < playerPoints) {
+    dispatch(endGame(MESSAGES.win));
+    return;
+  }
+
+  dispatch(endGame(MESSAGES.push));
 };
