@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { getPlayerHand } from '../selectors';
 
 import Card from './common/Card';
 
@@ -14,7 +15,7 @@ function PlayerHand({ hand }) {
 }
 
 const mapStateToProps = (state) => ({
-  hand: state.cards.player,
+  hand: getPlayerHand(state),
 });
 
 export default connect(mapStateToProps)(PlayerHand);

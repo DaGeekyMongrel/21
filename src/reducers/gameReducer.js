@@ -1,6 +1,5 @@
 import {
   GAME_START,
-  GAME_RESET,
   GAME_END,
   WINNER_SET,
   MESSAGE_SET,
@@ -27,17 +26,11 @@ export default function (state = initialState, action) {
         rounds: state.rounds + 1,
       };
 
-    case GAME_RESET:
-      return {
-        ...state,
-        inProgress: false,
-        msg: '',
-      };
-
     case GAME_START:
       return {
         ...state,
         inProgress: true,
+        msg: '',
       };
 
     case WINNER_SET:

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { getHouseHand } from '../selectors';
 
 import Card from './common/Card';
 
@@ -18,7 +19,7 @@ function HouseHand({ hand, inProgress }) {
 }
 
 const mapStateToProps = (state) => ({
-  hand: state.cards.house,
+  hand: getHouseHand(state),
   inProgress: state.game.inProgress,
 });
 

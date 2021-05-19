@@ -7,7 +7,7 @@ import {
   MESSAGE_SET,
   WINNER_SET,
 } from './types';
-import { calculateWinner, getPoints } from '../utils/cards';
+import { getHousePoints, getPlayerPoints, selectWinner } from '../selectors';
 
 export const resetGame = () => ({
   type: GAME_RESET,
@@ -25,22 +25,16 @@ export const setWinner = (winner) => ({
 
 export const hit = () => (dispatch, getState) => {
   dispatch(dealTo(PLAYER));
-  if (getPoints(getState().cards.player) >= 21) dispatch(endGame());
+  if (getPlayerPoints(getState()) >= 21) dispatch(endGame());
 };
 
 export const finalDeal = () => (dispatch, getState) => {
-  const getHousePoints = () => getPoints(getState().cards.house);
-
-  while (getHousePoints() < 17) {
+  while (getHousePoints(getState()) < 17) {
     dispatch(dealTo(HOUSE));
   }
 };
 
 export const startGame = () => (dispatch, getState) => {
-  if (getState().game.rounds !== 0) {
-    dispatch(resetGame());
-  }
-
   dispatch({
     type: GAME_START,
   });
@@ -53,15 +47,15 @@ export const startGame = () => (dispatch, getState) => {
     dispatch(dealTo(HOUSE));
   }
 
-  if (getPoints(getState().cards.player) === 21) dispatch(endGame());
+  if (getPlayerPoints(getState()) === 21) dispatch(endGame());
 };
 
 export const endGame = () => (dispatch, getState) => {
   dispatch(finalDeal());
 
-  const { house, player } = getState().cards;
+  const state = getState();
 
-  const winner = calculateWinner(house, player);
+  const winner = selectWinner(state);
 
   if (winner) {
     dispatch(setWinner(winner));
