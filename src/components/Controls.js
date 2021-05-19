@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { hit, endGame, startGame } from '../actions';
+import { hit, endGame, startGame } from '../actions/gameActions';
 
 function Controls(props) {
   const { hit, endGame, inProgress, startGame } = props;

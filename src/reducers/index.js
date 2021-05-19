@@ -6,8 +6,9 @@ import {
   GAME_END,
   WINNER_SET,
   MESSAGE_SET,
+  CARDS_RESET,
 } from '../actions/types';
-import { deck, getPoints } from '../utils/cards';
+import { deck, getPoints, shuffle } from '../utils/cards';
 
 const initialState = {
   deck: deck,
@@ -50,7 +51,20 @@ export default function (state = initialState, action) {
     case CARDS_SHUFFLE:
       return {
         ...state,
-        deck: action.payload,
+        deck: shuffle(state.deck),
+      };
+
+    case CARDS_RESET:
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          hand: [],
+        },
+        house: {
+          ...state.house,
+          hand: [],
+        },
       };
 
     case GAME_END:
@@ -65,12 +79,10 @@ export default function (state = initialState, action) {
         ...state,
         player: {
           ...state.player,
-          hand: [],
           points: 0,
         },
         house: {
           ...state.house,
-          hand: [],
           points: 0,
         },
         inProgress: false,
